@@ -24,28 +24,12 @@ namespace pdfViewer
             pdfViewer1.ShowBookmarks = false;
             pdfViewer1.ShowToolbar = false;
             pdfViewer1.ZoomMode = PdfViewerZoomMode.FitWidth;
-
-            OpenFile();
+            pdfViewer1.Document?.Dispose();
+            pdfViewer1.Document = OpenDocument(FileName);
+            Text = FileName;
         }
 
-        private void OpenFile()
-        {
-            using (var form = new OpenFileDialog())
-            {
-                form.Filter = "PDF Files (*.pdf)|*.pdf|All Files (*.*)|*.*";
-                form.RestoreDirectory = true;
-                form.Title = "Open PDF File";
-
-                if (form.ShowDialog(this) != DialogResult.OK)
-                {
-                    Dispose();
-                    return;
-                }
-
-                pdfViewer1.Document?.Dispose();
-                pdfViewer1.Document = OpenDocument(form.FileName);
-            }
-        }
+        public string FileName { get; set; }
 
         private PdfDocument OpenDocument(string fileName)
         {
